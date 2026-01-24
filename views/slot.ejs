@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <title><%= title %></title>
+    <link rel="icon" href="/logoWeb/logo.svg" type="image/svg+xml" />
+    <style>
+      body {
+        font-family: "Segoe UI", sans-serif;
+        display: flex;
+        flex-direction: column;
+
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        min-height: 100vh;
+        background-color: #2f2f2f;
+        margin: 0;
+        color: white;
+      }
+
+      .slot-machine {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100vh;
+
+        .bgImage {
+          position: absolute;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          img {
+            width: 1020px;
+          }
+        }
+      }
+
+      .reels-container {
+        display: flex;
+        gap: 36px;
+        margin: 30px 0;
+        padding: 15px;
+        border-radius: 15px;
+        transform: translateY(-20px) translateX(-30px);
+      }
+
+      .reel-window {
+        width: 120px;
+        height: 174px;
+        background: #fff;
+        overflow: hidden;
+        position: relative;
+        box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.2);
+      }
+
+      /* Overlay bayangan untuk efek kedalaman */
+      .reel-window::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          rgba(0, 0, 0, 0.2) 0%,
+          transparent 15%,
+          transparent 85%,
+          rgba(0, 0, 0, 0.2) 100%
+        );
+        pointer-events: none;
+      }
+
+      .reel-strip {
+        position: absolute;
+        top: 27px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 27px;
+        will-change: transform; /* Optimalisasi performa */
+      }
+
+      .reel-strip img {
+        width: 120px;
+        height: 120px;
+        object-fit: contain;
+        padding: 0;
+
+        box-sizing: border-box;
+        /* Efek motion blur otomatis saat berputar kencang */
+        transition: filter 0.1s;
+      }
+
+      .spinning img {
+        filter: blur(2px);
+      }
+
+      button {
+        position: absolute;
+        bottom: 10%;
+
+        background: #fbbf24;
+        color: #000;
+        border: none;
+        padding: 18px 60px;
+        font-size: 1.8rem;
+        font-weight: 900;
+        border-radius: 100px;
+        cursor: pointer;
+        box-shadow: 0 6px 0 #b45309;
+        transition: all 0.1s;
+      }
+
+      button:active {
+        transform: translateY(4px);
+        box-shadow: 0 2px 0 #b45309;
+      }
+      button:disabled {
+        background: #4b5563;
+        color: #9ca3af;
+        box-shadow: none;
+        cursor: not-allowed;
+      }
+
+      .result {
+        position: absolute;
+        display: none;
+        margin-top: 30px;
+        font-size: 2rem;
+        height: 40px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+      }
+
+      .footer {
+        height: 300px;
+      }
+
+      /* Style untuk Menu Tema */
+      .theme-switch-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        padding: 8px;
+        border-radius: 50px;
+        display: flex;
+        gap: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      .theme-btn {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition:
+          transform 0.2s,
+          border-color 0.2s;
+      }
+      .theme-btn:hover {
+        transform: scale(1.2);
+      }
+      .theme-btn.active {
+        border-color: #fbbf24;
+        transform: scale(1.1);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Menu Ganti Tema -->
+    <div class="theme-switch-container">
+      <div
+        class="theme-btn active"
+        style="background: #2f2f2f"
+        onclick="changeTheme('dark')"
+        title="Gelap"
+      ></div>
+      <div
+        class="theme-btn"
+        style="background: #f3f4f6"
+        onclick="changeTheme('light')"
+        title="Terang"
+      ></div>
+      <div
+        class="theme-btn"
+        style="background: #047857"
+        onclick="changeTheme('green')"
+        title="Hijau"
+      ></div>
+    </div>
+
+    <div class="slot-machine">
+      <div class="reels-container">
+        <div class="reel-window">
+          <div class="reel-strip" id="strip1"></div>
+        </div>
+        <div class="reel-window">
+          <div class="reel-strip" id="strip2"></div>
+        </div>
+        <div class="reel-window">
+          <div class="reel-strip" id="strip3"></div>
+        </div>
+      </div>
+      <div class="bgImage">
+        <img src="image/machine_slot.png" alt="" />
+      </div>
+
+      <button id="spinBtn">SPIN</button>
+      <div id="result" class="result"></div>
+    </div>
+
+    <style>
+      .kontenLain {
+        width: 100%;
+        max-width: 1020px;
+        margin: 80px auto 20px;
+        padding: 0 20px;
+        box-sizing: border-box;
+
+        .section-title {
+          font-size: 2rem;
+          font-weight: 800;
+          text-align: center;
+          margin-bottom: 40px;
+          color: #fbbf24;
+          background: linear-gradient(to right, #fbbf24, #d97706);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          text-transform: uppercase;
+          letter-spacing: 2px;
+          text-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+          filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        .services-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+          gap: 30px;
+
+          .service-card {
+            background: linear-gradient(145deg, #3a3a3a, #2a2a2a);
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            padding: 30px 20px;
+            border-radius: 20px;
+            border-radius: 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+
+            &:hover {
+              transform: translateY(-10px);
+              border-color: #fbbf24;
+              box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+              background: rgba(255, 255, 255, 0.06);
+              border-color: rgba(251, 191, 36, 0.5);
+              box-shadow:
+                0 20px 40px rgba(0, 0, 0, 0.4),
+                0 0 20px rgba(251, 191, 36, 0.1);
+            }
+
+            .icon {
+              font-size: 3.5rem;
+              margin-bottom: 15px;
+              filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.3));
+              font-size: 3rem;
+              margin-bottom: 20px;
+              background: rgba(251, 191, 36, 0.1);
+              width: 80px;
+              height: 80px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              border-radius: 50%;
+              margin-left: auto;
+              margin-right: auto;
+              transition: transform 0.3s;
+            }
+
+            &:hover .icon {
+              transform: scale(1.1) rotate(5deg);
+              background: rgba(251, 191, 36, 0.2);
+            }
+
+            h3 {
+              margin: 10px 0;
+              color: #fff;
+              font-size: 1.3rem;
+              font-weight: 700;
+            }
+
+            p {
+              color: #9ca3af;
+              font-size: 0.95rem;
+              margin-bottom: 25px;
+              line-height: 1.4;
+            }
+
+            a {
+              display: inline-block;
+              padding: 10px 30px;
+              background: #fbbf24;
+              color: #171717;
+              padding: 12px 35px;
+              background: transparent;
+              color: #fbbf24;
+              border: 2px solid #fbbf24;
+              text-decoration: none;
+              border-radius: 50px;
+              font-weight: 700;
+              font-weight: 800;
+              text-transform: uppercase;
+              font-size: 0.9rem;
+              letter-spacing: 1px;
+              transition: all 0.2s;
+
+              &:hover {
+                background: #fff;
+                box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+                transform: scale(1.05);
+                background: #fbbf24;
+                color: #000;
+                box-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
+              }
+            }
+          }
+        }
+      }
+    </style>
+    <div class="kontenLain">
+      <div class="section-title">Layanan Kami</div>
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="icon">🏰</div>
+          <h3>Copy Base</h3>
+          <p>Koleksi Layout Base Terbaik</p>
+          <a href="#">Salin</a>
+        </div>
+        <div class="service-card">
+          <div class="icon">⚔️</div>
+          <h3>Combo Attack</h3>
+          <p>Strategi Serangan Bintang 3</p>
+          <a href="#">Pelajari</a>
+        </div>
+        <div class="service-card">
+          <div class="icon">🏆</div>
+          <h3>Info Tournament</h3>
+          <p>Jadwal & Info Kompetisi</p>
+          <a href="#">Cek Info</a>
+        </div>
+      </div>
+    </div>
+
+    <style>
+      .footer {
+        width: 100%;
+        background: #0f0f0f;
+        padding: 120px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        margin-top: 80px;
+        position: relative;
+        overflow: hidden;
+
+        /* Background pattern yang lebih elegan */
+        background-image:
+          radial-gradient(
+            circle at 10% 20%,
+            rgba(251, 191, 36, 0.05) 0%,
+            transparent 20%
+          ),
+          radial-gradient(
+            circle at 90% 80%,
+            rgba(251, 191, 36, 0.05) 0%,
+            transparent 20%
+          ),
+          linear-gradient(to bottom, #1a1a1a, #050505);
+
+        /* Garis aksen neon di bagian atas */
+        &::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 1px;
+          background: linear-gradient(90deg, transparent, #fbbf24, transparent);
+          box-shadow: 0 0 15px rgba(251, 191, 36, 0.5);
+        }
+
+        p {
+          font-size: 1.2rem;
+          color: #9ca3af;
+          margin: 0 0 40px 0;
+          letter-spacing: 1px;
+
+          a {
+            color: #fbbf24;
+            text-decoration: none;
+            font-weight: 800;
+            transition: all 0.3s;
+            position: relative;
+
+            &:hover {
+              color: #fff;
+              text-shadow: 0 0 20px rgba(251, 191, 36, 0.8);
+            }
+          }
+        }
+
+        .social-links {
+          display: flex;
+          gap: 20px;
+          flex-wrap: wrap;
+          justify-content: center;
+
+          a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #e5e7eb;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 50px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(5px);
+
+            &:hover {
+              transform: translateY(-5px) scale(1.05);
+              background: rgba(255, 255, 255, 0.1);
+              border-color: #fbbf24;
+              box-shadow:
+                0 10px 25px rgba(0, 0, 0, 0.5),
+                0 0 15px rgba(251, 191, 36, 0.2);
+              color: #fff;
+            }
+
+            img {
+              width: 24px;
+              height: 24px;
+              transition: transform 0.4s;
+              filter: grayscale(100%) brightness(200%);
+            }
+
+            &:hover img {
+              transform: rotate(10deg) scale(1.2);
+              filter: none;
+              scale: 2;
+            }
+
+            /* Style khusus tombol donasi Saweria */
+            &.donate-btn {
+              background: linear-gradient(135deg, #fbbf24, #d97706);
+              color: #000;
+              border: none;
+              margin-left: 10px;
+              box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
+
+              &:hover {
+                background: linear-gradient(135deg, #fff, #f3f4f6);
+                box-shadow: 0 0 30px rgba(251, 191, 36, 0.6);
+                transform: translateY(-5px) scale(1.1);
+              }
+            }
+          }
+        }
+      }
+    </style>
+
+    <div class="footer">
+      <p>
+        Dibuat dengan ❤️ oleh
+        <a href="https://github.com/noelao" target="_blank">elplongor</a>
+      </p>
+      <div class="social-links">
+        <a href="https://www.tiktok.com/@noelao6" target="_blank">
+          <img src="image/logo/logo_tiktok.png" alt="TikTok" />
+          <span>elplongor</span>
+        </a>
+        <a href="https://www.facebook.com/elplongor" target="_blank">
+          <img src="image/logo/logo_fb.svg" alt="Facebook" />
+          <span>elplongor</span>
+        </a>
+        <a href="https://www.youtube.com/@elplongor" target="_blank">
+          <img src="image/logo/logo_yt.svg" alt="YouTube" />
+          <span>elplongor</span>
+        </a>
+        <a
+          href="https://saweria.co/elplongor"
+          target="_blank"
+          class="donate-btn"
+          style="height: 3rem; aspect-ratio: 5;"
+        >
+          <img src="image/logo/logo-saweria.svg" alt="Saweria" />
+          <span>Traktir Cendol</span>
+        </a>
+      </div>
+    </div>
+
+    <script>
+      // --- 1. Inisialisasi Audio ---
+      const spinSound = new Audio("/sfx/putar2.mp3");
+      const jackpotSound = new Audio("/sfx/jackpot.mp3");
+
+      // Atur agar suara spin terus mengulang (loop) selama mesin jalan
+      spinSound.loop = true;
+
+      const stopSounds = [
+        new Audio("/sfx/kombo1.mp3"),
+        new Audio("/sfx/kombo2.mp3"),
+        new Audio("/sfx/kombo3.mp3"),
+      ];
+
+      const strips = [
+        document.getElementById("strip1"),
+        document.getElementById("strip2"),
+        document.getElementById("strip3"),
+      ];
+      const spinBtn = document.getElementById("spinBtn");
+      const resultDiv = document.getElementById("result");
+
+      // --- Fungsi Ganti Tema ---
+      function changeTheme(theme) {
+        const body = document.body;
+        const buttons = document.querySelectorAll(".theme-btn");
+
+        // Reset active class
+        buttons.forEach((btn) => btn.classList.remove("active"));
+
+        if (theme === "dark") {
+          body.style.backgroundColor = "#2f2f2f";
+          body.style.color = "white";
+          buttons[0].classList.add("active");
+        } else if (theme === "light") {
+          body.style.backgroundColor = "#f3f4f6";
+          body.style.color = "#1f2937"; // Text abu gelap
+          buttons[1].classList.add("active");
+        } else if (theme === "green") {
+          body.style.backgroundColor = "#047857"; // Emerald Green
+          body.style.color = "white";
+          buttons[2].classList.add("active");
+        }
+      }
+
+      let imageList = [];
+      const imgHeight = 92;
+      const MIN_SPIN_ROUNDS = 5; // Minimal berapa kali putar ulang gambar
+
+      async function init() {
+        const res = await fetch("/api/data/pasukan");
+        const data = await res.json();
+
+        function flatten(node) {
+          let files = [];
+          if (node.type === "file") files.push("/" + node.path);
+          else if (node.children)
+            node.children.forEach((c) => (files = files.concat(flatten(c))));
+          return files;
+        }
+        imageList = flatten(data);
+
+        // Inisialisasi awal
+        strips.forEach((strip) => fillStrip(strip));
+      }
+
+      // Fungsi mengacak array (Fisher-Yates Shuffle)
+      function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+      }
+
+      function fillStrip(strip) {
+        strip.innerHTML = "";
+        // Kita buat strip yang sangat panjang berisi gambar yang diacak total
+        const shuffledImages = shuffle([
+          ...imageList,
+          ...imageList,
+          ...imageList,
+          ...imageList,
+        ]);
+        shuffledImages.forEach((src) => {
+          const img = document.createElement("img");
+          img.src = src;
+          strip.appendChild(img);
+        });
+      }
+
+      function animateReel(index, duration) {
+        return new Promise((resolve) => {
+          const strip = strips[index];
+          fillStrip(strip); // Acak ulang setiap kali spin dimulai
+
+          strip.classList.add("spinning");
+          let startTime = null;
+          const totalHeight = (strip.children.length - 1) * imgHeight;
+
+          function easeOutQuart(x) {
+            return 1 - Math.pow(1 - x, 4);
+          }
+
+          function step(timestamp) {
+            if (!startTime) startTime = timestamp;
+            const elapsed = timestamp - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+
+            // Gunakan easing function untuk pengereman super halus
+            const easedProgress = easeOutQuart(progress);
+            const currentY = easedProgress * totalHeight;
+
+            strip.style.transform = `translateY(-${currentY}px)`;
+
+            if (progress < 1) {
+              requestAnimationFrame(step);
+            } else {
+              strip.classList.remove("spinning");
+              // Snap ke posisi gambar terdekat
+              const finalIdx = Math.round(currentY / imgHeight);
+              strip.style.transform = `translateY(-${finalIdx * imgHeight}px)`;
+
+              // Putar suara stop yang sesuai dengan urutan reel (0, 1, atau 2)
+              stopSounds[index].currentTime = 0;
+              stopSounds[index].play();
+              resolve(strip.children[finalIdx].src);
+            }
+          }
+          requestAnimationFrame(step);
+        });
+      }
+
+      spinBtn.addEventListener("click", async () => {
+        spinBtn.disabled = true;
+        resultDiv.innerText = "";
+
+        // Reset dan mulai suara putar
+        spinSound.volume = 1.0;
+        spinSound.playbackRate = 1.0;
+        spinSound.currentTime = 0;
+        spinSound.play();
+
+        // Hitung durasi agar bisa digunakan untuk kalkulasi fade
+        const d1 = 3000 + Math.random() * 500;
+        const d2 = 3600 + Math.random() * 500;
+        const d3 = 4200 + Math.random() * 500;
+
+        const p1 = animateReel(0, d1);
+        const p2 = animateReel(1, d2);
+        const p3 = animateReel(2, d3);
+
+        // Logika transisi suara saat reel 2 (index 1) berhenti
+        p2.then(() => {
+          spinSound.playbackRate = 0.5;
+          const fadeDuration = d3 - d2;
+          const startTime = performance.now();
+
+          function fadeOut() {
+            if (spinSound.paused) return;
+            const elapsed = performance.now() - startTime;
+            const progress = Math.min(elapsed / fadeDuration, 1);
+            spinSound.volume = 1 - progress;
+            if (progress < 1) requestAnimationFrame(fadeOut);
+          }
+          fadeOut();
+        });
+
+        const results = await Promise.all([p1, p2, p3]);
+
+        // Hentikan suara putar setelah semua selesai
+        spinSound.pause();
+
+        if (results[0] === results[1] && results[1] === results[2]) {
+          resultDiv.innerText = "JACKPOT! 🏆";
+          resultDiv.style.color = "#fbbf24";
+          resultDiv.style.textShadow = "0 0 20px #fbbf24";
+        } else {
+          resultDiv.innerText = "COBA LAGI";
+          resultDiv.style.color = "#ef4444";
+          resultDiv.style.textShadow = "none";
+        }
+        spinBtn.disabled = false;
+      });
+
+      init();
+    </script>
+  </body>
+</html>

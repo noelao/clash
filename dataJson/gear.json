@@ -1,0 +1,88 @@
+{
+    "name": "gear",
+    "path": "DataImage/gear",
+    "type": "folder",
+    "children": [
+        {
+            "name": "king",
+            "path": "DataImage/gear/king",
+            "type": "folder",
+            "children": []
+        },
+        {
+            "name": "prince",
+            "path": "DataImage/gear/prince",
+            "type": "folder",
+            "children": []
+        },
+        {
+            "name": "queen",
+            "path": "DataImage/gear/queen",
+            "type": "folder",
+            "children": [
+                {
+                    "name": "frozen-arrow.png",
+                    "path": "DataImage/gear/queen/frozen-arrow.png",
+                    "type": "file",
+                    "extension": ".png"
+                },
+                {
+                    "name": "giant-puppet.png",
+                    "path": "DataImage/gear/queen/giant-puppet.png",
+                    "type": "file",
+                    "extension": ".png"
+                },
+                {
+                    "name": "Healer_Puppet.png",
+                    "path": "DataImage/gear/queen/Healer_Puppet.png",
+                    "type": "file",
+                    "extension": ".png"
+                },
+                {
+                    "name": "mirror-gear.png",
+                    "path": "DataImage/gear/queen/mirror-gear.png",
+                    "type": "file",
+                    "extension": ".png"
+                }
+            ]
+        },
+        {
+            "name": "rc",
+            "path": "DataImage/gear/rc",
+            "type": "folder",
+            "children": [
+                {
+                    "name": "hastle.jpg",
+                    "path": "DataImage/gear/rc/hastle.jpg",
+                    "type": "file",
+                    "extension": ".jpg"
+                },
+                {
+                    "name": "shiel.jpg",
+                    "path": "DataImage/gear/rc/shiel.jpg",
+                    "type": "file",
+                    "extension": ".jpg"
+                }
+            ]
+        },
+        {
+            "name": "warder",
+            "path": "DataImage/gear/warder",
+            "type": "folder",
+            "children": [
+                {
+                    "name": "kebal.jpg",
+                    "path": "DataImage/gear/warder/kebal.jpg",
+                    "type": "file",
+                    "extension": ".jpg"
+                },
+                {
+                    "name": "rage.jpg",
+                    "path": "DataImage/gear/warder/rage.jpg",
+                    "type": "file",
+                    "extension": ".jpg"
+                }
+            ]
+        }
+    ]
+}

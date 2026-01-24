@@ -1,0 +1,193 @@
+{
+    "name": "pasukan",
+    "path": "DataImage/pasukan",
+    "type": "folder",
+    "children": [
+        {
+            "name": "archer.webp",
+            "path": "DataImage/pasukan/archer.webp",
+            "type": "file",
+            "extension": ".webp"
+        },
+        {
+            "name": "baby dragon.webp",
+            "path": "DataImage/pasukan/baby dragon.webp",
+            "type": "file",
+            "extension": ".webp"
+        },
+        {
+            "name": "baloon.webp",
+            "path": "DataImage/pasukan/baloon.webp",
+            "type": "file",
+            "extension": ".webp"
+        },
+        {
+            "name": "barbarian.webp",
+            "path": "DataImage/pasukan/barbarian.webp",
+            "type": "file",
+            "extension": ".webp"
+        },
+        {
+            "name": "bowler.jpg",
+            "path": "DataImage/pasukan/bowler.jpg",
+            "type": "file",
+            "extension": ".jpg"
+        },
+        {
+            "name": "dragon rider.webp",
+            "path": "DataImage/pasukan/dragon rider.webp",
+            "type": "file",
+            "extension": ".webp"
+        },
+        {
+            "name": "dragon.webp",
+            "path": "DataImage/pasukan/dragon.webp",
+            "type": "file",
+            "extension": ".webp"
+        },
+        {
+            "name": "druin bear.jpg",
+            "path": "DataImage/pasukan/druin bear.jpg",
+            "type": "file",
+            "extension": ".jpg"
+        },
+        {
+            "name": "electro dragon.webp",
+            "path": "DataImage/pasukan/electro dragon.webp",
+            "type": "file",
+            "extension": ".webp"
+        },
+        {
+            "name": "electro titan.webp",
+            "path": "DataImage/pasukan/electro titan.webp",
+            "type": "file",
+            "extension": ".webp"
+        },
+        {
+            "name": "furnace.jpg",
+            "path": "DataImage/pasukan/furnace.jpg",
+            "type": "file",
+            "extension": ".jpg"
+        },
+        {
+            "name": "giant.webp",
+            "path": "DataImage/pasukan/giant.webp",
+            "type": "file",
+            "extension": ".webp"
+        },
+        {
+            "name": "goblin.webp",
+            "path": "DataImage/pasukan/goblin.webp",
+            "type": "file",
+            "extension": ".webp"
+        },
+        {
+            "name": "golem.jpg",
+            "path": "DataImage/pasukan/golem.jpg",
+            "type": "file",
+            "extension": ".jpg"
+        },
+        {
+            "name": "healer.webp",
+            "path": "DataImage/pasukan/healer.webp",
+            "type": "file",
+            "extension": ".webp"
+        },
+        {
+            "name": "hog rider.jpg",
+            "path": "DataImage/pasukan/hog rider.jpg",
+            "type": "file",
+            "extension": ".jpg"
+        },
+        {
+            "name": "hunter.jpg",
+            "path": "DataImage/pasukan/hunter.jpg",
+            "type": "file",
+            "extension": ".jpg"
+        },
+        {
+            "name": "ice golem.jpg",
+            "path": "DataImage/pasukan/ice golem.jpg",
+            "type": "file",
+            "extension": ".jpg"
+        },
+        {
+            "name": "lavaloon.jpg",
+            "path": "DataImage/pasukan/lavaloon.jpg",
+            "type": "file",
+            "extension": ".jpg"
+        },
+        {
+            "name": "meteromite.webp",
+            "path": "DataImage/pasukan/meteromite.webp",
+            "type": "file",
+            "extension": ".webp"
+        },
+        {
+            "name": "miner.webp",
+            "path": "DataImage/pasukan/miner.webp",
+            "type": "file",
+            "extension": ".webp"
+        },
+        {
+            "name": "mini warder.jpg",
+            "path": "DataImage/pasukan/mini warder.jpg",
+            "type": "file",
+            "extension": ".jpg"
+        },
+        {
+            "name": "minion.jpg",
+            "path": "DataImage/pasukan/minion.jpg",
+            "type": "file",
+            "extension": ".jpg"
+        },
+        {
+            "name": "p.e.k.k.a.webp",
+            "path": "DataImage/pasukan/p.e.k.k.a.webp",
+            "type": "file",
+            "extension": ".webp"
+        },
+        {
+            "name": "root rider.webp",
+            "path": "DataImage/pasukan/root rider.webp",
+            "type": "file",
+            "extension": ".webp"
+        },
+        {
+            "name": "thrower.webp",
+            "path": "DataImage/pasukan/thrower.webp",
+            "type": "file",
+            "extension": ".webp"
+        },
+        {
+            "name": "valkyre.jpg",
+            "path": "DataImage/pasukan/valkyre.jpg",
+            "type": "file",
+            "extension": ".jpg"
+        },
+        {
+            "name": "wall breaker.webp",
+            "path": "DataImage/pasukan/wall breaker.webp",
+            "type": "file",
+            "extension": ".webp"
+        },
+        {
+            "name": "which.jpg",
+            "path": "DataImage/pasukan/which.jpg",
+            "type": "file",
+            "extension": ".jpg"
+        },
+        {
+            "name": "wizard.webp",
+            "path": "DataImage/pasukan/wizard.webp",
+            "type": "file",
+            "extension": ".webp"
+        },
+        {
+            "name": "yetti.webp",
+            "path": "DataImage/pasukan/yetti.webp",
+            "type": "file",
+            "extension": ".webp"
+        }
+    ]
+}
